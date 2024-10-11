@@ -6,6 +6,8 @@ from coin import Coin
 pygame.init()
 pygame.mixer.init()
 
+#For controller purposes
+#LEFT = 1024
 
 game_width = 750
 game_height = 750
@@ -40,11 +42,18 @@ gameover = False
 
 #Score section
 score = 0
+pog = [
+    Coin(37,78)
+    ,Coin(37,94)
+    ,Coin(37,108)
+
+]
 if os.path.exists('score.dat'):
     with open ('score.dat' , 'rb') as file:
         score = pickle.load(file)
         print(score)
 testcoin = Coin(37,78)
+
 
 
 #sound/music
@@ -84,6 +93,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        print(event.type)
 
     #save x and y in a variables
     save_x = playerect.x 
@@ -167,6 +177,9 @@ while running:
 
         screen.blit(enemyimage,(enemy_x,enemy_y))
         testcoin.draw(screen)
+        for coin in pog:
+            Coin.draw(coin,screen)
+
     else:
         screen.fill((255,0,0))
         pygame.mixer.music.stop()
