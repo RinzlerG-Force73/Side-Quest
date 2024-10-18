@@ -52,7 +52,6 @@ if os.path.exists('score.dat'):
     with open ('score.dat' , 'rb') as file:
         score = pickle.load(file)
         print(score)
-testcoin = Coin(37,78)
 
 
 
@@ -93,7 +92,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        print(event.type)
+        #print(event.type)
 
     #save x and y in a variables
     save_x = playerect.x 
@@ -164,7 +163,9 @@ while running:
             collision_sound.play()
         gameover = True
 
-        
+    for coin in pog:
+        if playerect.colliderect(coin.rect):
+            score += 10
 
     #draw section
     if not gameover:
@@ -173,12 +174,10 @@ while running:
         screen.blit(playerimage,playerect)
         #pygame.draw.rect(screen, (0,255,0), playerect)
 
-        score += 1
-
+    
         screen.blit(enemyimage,(enemy_x,enemy_y))
-        testcoin.draw(screen)
         for coin in pog:
-            Coin.draw(coin,screen)
+            coin.draw(screen)
 
     else:
         screen.fill((255,0,0))
