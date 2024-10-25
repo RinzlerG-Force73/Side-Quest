@@ -28,10 +28,30 @@ enemy_x = 0
 enemy_y = game_height
 enemy_speed = 1
 
+
+
+#Score section
+score = 0
+highscore = 0
+pog = [
+    Coin(37,78)
+    ,Coin(37,94)
+    ,Coin(37,108)
+
+]
+if os.path.exists('highscore.dat'):
+    with open ('highscore.dat' , 'rb') as file:
+        highscore = pickle.load(file)
+        print(highscore)
+
+
 #Text section
 font = pygame.font.SysFont("arialunicode", 70, bold = True)
+font2 = pygame.font.SysFont("arialunicode", 24, italic = True)
 gameovertext = font.render("Gameover" , True , (0,0,0))
 gameovertextrect = gameovertext.get_rect(center = (game_width/2 , game_height/2))
+scoretext = font2.render(f"score: {score}" , True , (0,0,0))
+
 
 #singleplayer section
 singleplayer = True
@@ -39,19 +59,6 @@ spacelock = False
 
 #gameover section
 gameover = False
-
-#Score section
-score = 0
-pog = [
-    Coin(37,78)
-    ,Coin(37,94)
-    ,Coin(37,108)
-
-]
-if os.path.exists('score.dat'):
-    with open ('score.dat' , 'rb') as file:
-        score = pickle.load(file)
-        print(score)
 
 
 
@@ -157,21 +164,27 @@ while running:
             playerect.x = save_x
             playerect.y = save_y
 
-    #checking for colisions with enemy and player and coin
+    #checking for colisions with enemy and player
     if playerect.colliderect(enemyrect):
         if not gameover:
             collision_sound.play()
+            highscore = max(score,highscore)
         gameover = True
 
+
+    #Add Score
     for coin in pog:
         if playerect.colliderect(coin.rect):
             score += 10
+            scoretext = font2.render(f"score: {score}" , True , (0,0,0))
+            pog.remove(coin)
 
     #draw section
     if not gameover:
         for rect in maze:
             pygame.draw.rect(screen,( 0,52,0), rect )
         screen.blit(playerimage,playerect)
+        screen.blit(scoretext,(12,0))
         #pygame.draw.rect(screen, (0,255,0), playerect)
 
     
@@ -190,6 +203,7 @@ while running:
             collision_sound.stop()
             pygame.mixer.music.play(loops = -1)
             gameover = False
+            score = 0
 
 
 
@@ -205,9 +219,9 @@ while running:
 
 
 
-print(score)
-with open ('score.dat' , 'wb') as file:
-    pickle.dump(score,file)
+print(highscore)
+with open ('highscore.dat' , 'wb') as file:
+    pickle.dump(highscore,file)
 
 
 
