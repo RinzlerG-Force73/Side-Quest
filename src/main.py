@@ -5,6 +5,8 @@ from coin import Coin
 
 pygame.init()
 pygame.mixer.init()
+pygame.joystick.init()
+joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
 
 #For controller purposes
 #LEFT = 1024
@@ -33,12 +35,16 @@ enemy_speed = 1
 #Score section
 score = 0
 highscore = 0
-pog = [
+pog = []
+def resetpog():
+    global pog
+    pog = [
     Coin(37,78)
     ,Coin(37,94)
     ,Coin(37,108)
+    ]
+resetpog()
 
-]
 if os.path.exists('highscore.dat'):
     with open ('highscore.dat' , 'rb') as file:
         highscore = pickle.load(file)
@@ -51,6 +57,8 @@ font2 = pygame.font.SysFont("arialunicode", 24, italic = True)
 gameovertext = font.render("Gameover" , True , (0,0,0))
 gameovertextrect = gameovertext.get_rect(center = (game_width/2 , game_height/2))
 scoretext = font2.render(f"score: {score}" , True , (0,0,0))
+highscoretext = font2.render(f"highscore: {highscore}" , True , (0,0,0))
+highscoretextrect = highscoretext.get_rect()
 
 
 #singleplayer section
@@ -99,7 +107,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        #print(event.type)
+        if event.type == pygame.JOYBUTTONDOWN:
+            print(event)
 
     #save x and y in a variables
     save_x = playerect.x 
@@ -168,7 +177,6 @@ while running:
     if playerect.colliderect(enemyrect):
         if not gameover:
             collision_sound.play()
-            highscore = max(score,highscore)
         gameover = True
 
 
@@ -178,6 +186,9 @@ while running:
             score += 10
             scoretext = font2.render(f"score: {score}" , True , (0,0,0))
             pog.remove(coin)
+            highscore = max(score,highscore)
+            highscoretext = font2.render(f"highscore: {highscore}" , True , (0,0,0))
+            highscoretextrect = highscoretext.get_rect()
 
     #draw section
     if not gameover:
@@ -185,6 +196,7 @@ while running:
             pygame.draw.rect(screen,( 0,52,0), rect )
         screen.blit(playerimage,playerect)
         screen.blit(scoretext,(12,0))
+        screen.blit(highscoretext, (game_width - highscoretextrect.width,0))
         #pygame.draw.rect(screen, (0,255,0), playerect)
 
     
@@ -204,6 +216,8 @@ while running:
             pygame.mixer.music.play(loops = -1)
             gameover = False
             score = 0
+            scoretext = font2.render(f"score: {score}" , True , (0,0,0))
+            resetpog()
 
 
 
