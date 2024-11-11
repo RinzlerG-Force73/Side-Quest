@@ -48,16 +48,14 @@ resetpog()
 if os.path.exists('highscore.dat'):
     with open ('highscore.dat' , 'rb') as file:
         highscore = pickle.load(file)
-        print(highscore)
-
 
 #Text section
 font = pygame.font.SysFont("arialunicode", 70, bold = True)
 font2 = pygame.font.SysFont("arialunicode", 24, italic = True)
 gameovertext = font.render("Gameover" , True , (0,0,0))
 gameovertextrect = gameovertext.get_rect(center = (game_width/2 , game_height/2))
-scoretext = font2.render(f"score: {score}" , True , (0,0,0))
-highscoretext = font2.render(f"highscore: {highscore}" , True , (0,0,0))
+scoretext = font2.render(f"Score: {score}" , True , (0,0,0))
+highscoretext = font2.render(f"Highscore: {highscore}" , True , (0,0,0))
 highscoretextrect = highscoretext.get_rect()
 
 
@@ -95,12 +93,8 @@ maze = [
 ]
 
 #comment section
-'''pac man based game with 1 enemy that can go through walls but is slow and the coins increase score.
-before every move you want to save the x and y, and when collided with a wall, reset back to the previous x and y.
- Possibilities: add pellets and score counter, as well as adding extra point pellets (like cherrys).
- Eat ghosts with power pellets. save high score to computer. Maybe add the gateways at side of screen.'''
-
-#"""""""""""""""""""""""""Menu screen for next.""""""""""""""""""""""""""""
+'''Possibilities: add pellets and score counter, as well as adding extra point pellets (like cherrys).
+ Eat ghosts with power pellets. save high score to computer. Maybe add the gateways at side of screen. Laser system'''
 
 while running:
     #event handle mouse and keyboards input
@@ -108,7 +102,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.JOYBUTTONDOWN:
-            print(event)
+            pass #print(event)
 
     #save x and y in a variables
     save_x = playerect.x 
@@ -184,10 +178,10 @@ while running:
     for coin in pog:
         if playerect.colliderect(coin.rect):
             score += 10
-            scoretext = font2.render(f"score: {score}" , True , (0,0,0))
+            scoretext = font2.render(f"Score: {score}" , True , (0,0,0))
             pog.remove(coin)
             highscore = max(score,highscore)
-            highscoretext = font2.render(f"highscore: {highscore}" , True , (0,0,0))
+            highscoretext = font2.render(f"Highscore: {highscore}" , True , (0,0,0))
             highscoretextrect = highscoretext.get_rect()
 
     #draw section
@@ -208,6 +202,8 @@ while running:
         screen.fill((255,0,0))
         pygame.mixer.music.stop()
         screen.blit(gameovertext,gameovertextrect)
+        screen.blit(scoretext,(gameovertextrect.x,gameovertextrect.bottom))
+        screen.blit(highscoretext, (gameovertextrect.x,gameovertextrect.bottom + 30))
         if keys[pygame.K_RETURN]:
             enemy_x = 0
             enemy_y = game_height
@@ -216,7 +212,7 @@ while running:
             pygame.mixer.music.play(loops = -1)
             gameover = False
             score = 0
-            scoretext = font2.render(f"score: {score}" , True , (0,0,0))
+            scoretext = font2.render(f"Score: {score}" , True , (0,0,0))
             resetpog()
 
 
@@ -233,7 +229,6 @@ while running:
 
 
 
-print(highscore)
 with open ('highscore.dat' , 'wb') as file:
     pickle.dump(highscore,file)
 
