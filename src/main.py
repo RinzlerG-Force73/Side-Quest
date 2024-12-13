@@ -30,7 +30,8 @@ enemy_x = 0
 enemy_y = game_height
 enemy_speed = 1
 
-
+#Level Section
+level = 1
 
 #Score section
 score = 0
@@ -39,10 +40,10 @@ pog = []
 def resetpog():
     global pog
     pog = [
-    Coin(37,78)
-    ,Coin(37,94)
-    ,Coin(37,108)
+    Coin(game_width/2, 30)
     ]
+    for y in range(30):
+        pog.append(Coin(0,y*20))
 resetpog()
 
 if os.path.exists('highscore.dat'):
@@ -57,6 +58,8 @@ gameovertextrect = gameovertext.get_rect(center = (game_width/2 , game_height/2)
 scoretext = font2.render(f"Score: {score}" , True , (0,0,0))
 highscoretext = font2.render(f"Highscore: {highscore}" , True , (0,0,0))
 highscoretextrect = highscoretext.get_rect()
+leveltext = font2.render(f"Level: {level}" , True , (0,0,0))
+leveltextrect = leveltext.get_rect(midtop = (game_width/2 , 0 ))
 
 
 #singleplayer section
@@ -65,7 +68,6 @@ spacelock = False
 
 #gameover section
 gameover = False
-
 
 
 #sound/music
@@ -94,7 +96,9 @@ maze = [
 
 #comment section
 '''Possibilities: add pellets and score counter, as well as adding extra point pellets (like cherrys).
- Eat ghosts with power pellets. save high score to computer. Maybe add the gateways at side of screen. Laser system'''
+ Eat ghosts with power pellets. save high score to computer. Maybe add the gateways at side of screen. Laser system,
+
+ ******************Speed Increasing System*****************'''
 
 while running:
     #event handle mouse and keyboards input
@@ -153,8 +157,18 @@ while running:
     elif not keys[pygame.K_SPACE] and spacelock:
         spacelock = False
 
-
-   
+    #Check For Coins Running Out
+    if len(pog) == 0:
+        level += 1
+        enemy_x = 0
+        enemy_y = game_height
+        enemy_speed += 0.5
+        playerect.center = game_width/2, game_height/2
+        if enemy_speed >= 4:
+            player_speed += 1
+        leveltext = font2.render(f"Level: {level}" , True , (0,0,0))
+        leveltextrect = leveltext.get_rect(midtop = (game_width/2 , 0 ))
+        resetpog()
 
     #moves hitbox with player
     enemyrect.x = enemy_x
@@ -191,6 +205,7 @@ while running:
         screen.blit(playerimage,playerect)
         screen.blit(scoretext,(12,0))
         screen.blit(highscoretext, (game_width - highscoretextrect.width,0))
+        screen.blit(leveltext , leveltextrect)
         #pygame.draw.rect(screen, (0,255,0), playerect)
 
     
@@ -213,6 +228,11 @@ while running:
             gameover = False
             score = 0
             scoretext = font2.render(f"Score: {score}" , True , (0,0,0))
+            level = 1
+            leveltext = font2.render(f"Level: {level}" , True , (0,0,0))
+            leveltextrect = leveltext.get_rect(midtop = (game_width/2 , 0 ))
+            enemy_speed = 1
+            player_speed = 10
             resetpog()
 
 
