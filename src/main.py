@@ -33,17 +33,24 @@ enemy_speed = 1
 #Level Section
 level = 1
 
+#border section
+border_thickness = 27
+
 #Score section
 score = 0
 highscore = 0
 pog = []
 def resetpog():
     global pog
-    pog = [
-    Coin(game_width/2, 30)
-    ]
-    for y in range(30):
-        pog.append(Coin(0,y*20))
+    coinimage = pygame.image.load("images/coin.png").convert_alpha()
+    coinwidth: float = coinimage.get_width()
+    pog = []
+    for y in range(15):
+        pog.append(Coin(border_thickness + 40 - coinwidth/2,y*80+border_thickness + 16))
+    for y in range(15):
+        pog.append(Coin(game_width - border_thickness - 40 - coinwidth/2,y*80+border_thickness + 16))
+    for x in range(15):
+        pog.append(Coin( x * 65 + border_thickness + 40 - coinwidth/2,border_thickness + 16))
 resetpog()
 
 if os.path.exists('highscore.dat'):
@@ -76,22 +83,30 @@ pygame.mixer.music.load('sounds/77 Ganondorf Battle.mp3')
 pygame.mixer.music.play(loops = -1)
 collision_sound = pygame.mixer.Sound("sounds/12. Palace Theme 1.mp3")
 collision_sound.set_volume(0.2)
+coin_sound = pygame.mixer.Sound("sounds/pickupCoin.wav")
+coin_sound.set_volume(0.2)
+
 
 #maze section
 #COPY AND PASTE PREVIOUS LINE TO CHANGE X AND Y AND USE SPECIFIC NUMBERS and can change width and Height.
-border_thickness = 27
 maze = [
+    #Borders
       pygame.Rect(0,0,border_thickness,game_height)
     , pygame.Rect(0,0,game_width,border_thickness)
     , pygame.Rect(game_width - border_thickness,0,border_thickness,game_height)
     , pygame.Rect(0,game_height - border_thickness,game_width,border_thickness)
+    #Corners
     , pygame.Rect(80+border_thickness,80+border_thickness,90,60)
     , pygame.Rect(game_width - 80 - border_thickness - 90,80+border_thickness,90,60)
     , pygame.Rect(80+border_thickness, game_height - 80 - border_thickness - 60,90,60)
     , pygame.Rect(game_width - 80 - border_thickness - 90,game_height - 80 - border_thickness - 60,90,60)
+    #Walls
+    , pygame.Rect(80+border_thickness,240+border_thickness,90,240 - border_thickness)
+    , pygame.Rect(game_width - 80 - border_thickness - 90,240+border_thickness,90,240 - border_thickness)
+    #Start box Rects
     , pygame.Rect(game_width/2 - 90,game_height/2 + 60,180,30)
     , pygame.Rect(game_width/2 - 90,game_height/2 - 60,30,150)
-    , pygame.Rect(game_width/2 + 90,game_height/2 - 60,30,150)
+    , pygame.Rect(game_width/2 + 60,game_height/2 - 60,30,150)
 ]
 
 #comment section
@@ -197,6 +212,9 @@ while running:
             highscore = max(score,highscore)
             highscoretext = font2.render(f"Highscore: {highscore}" , True , (0,0,0))
             highscoretextrect = highscoretext.get_rect()
+            coin_sound.play()
+            #####################################pitch shifting########################################
+
 
     #draw section
     if not gameover:
