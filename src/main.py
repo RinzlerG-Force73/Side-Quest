@@ -45,12 +45,18 @@ def resetpog():
     coinimage = pygame.image.load("images/coin.png").convert_alpha()
     coinwidth: float = coinimage.get_width()
     pog = []
-    for y in range(15):
+    for y in range(9):
         pog.append(Coin(border_thickness + 40 - coinwidth/2,y*80+border_thickness + 16))
-    for y in range(15):
         pog.append(Coin(game_width - border_thickness - 40 - coinwidth/2,y*80+border_thickness + 16))
-    for x in range(15):
-        pog.append(Coin( x * 65 + border_thickness + 40 - coinwidth/2,border_thickness + 16))
+    for x in range(10):
+        pog.append(Coin( x * 68.2 + border_thickness + 40 - coinwidth/2,border_thickness + 16))
+        pog.append(Coin( x * 68.2 + border_thickness + 40 - coinwidth/2,8*80 + border_thickness + 16))
+        pog.append(Coin( x * 68.2 + border_thickness + 40 - coinwidth/2,2*80 + border_thickness + 16))
+        pog.append(Coin( x * 68.2 + border_thickness + 40 - coinwidth/2,6*80 + border_thickness + 16))
+    pog.append(Coin( 3 * 68.2 + border_thickness + 40 - coinwidth/2,1*80+border_thickness + 16))
+    pog.append(Coin( 6 * 68.2 + border_thickness + 40 - coinwidth/2,1*80+border_thickness + 16))
+    pog.append(Coin( 3 * 68.2 + border_thickness + 40 - coinwidth/2,7*80+border_thickness + 16))
+    pog.append(Coin( 6 * 68.2 + border_thickness + 40 - coinwidth/2,7*80+border_thickness + 16))
 resetpog()
 
 if os.path.exists('highscore.dat'):
@@ -213,7 +219,6 @@ while running:
             highscoretext = font2.render(f"Highscore: {highscore}" , True , (0,0,0))
             highscoretextrect = highscoretext.get_rect()
             coin_sound.play()
-            #####################################pitch shifting########################################
 
 
     #draw section
