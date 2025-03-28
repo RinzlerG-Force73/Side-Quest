@@ -121,6 +121,8 @@ maze = [
 
  ******************Speed Increasing System*****************'''
 
+'''Troll enemy if sitting still'''
+
 while running:
     #event handle mouse and keyboards input
     for event in pygame.event.get():
