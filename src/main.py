@@ -148,6 +148,7 @@ while running:
         if keys[pygame.K_w]:
             playerect.y -= player_speed
 
+
         #enemy movement
         if not singleplayer:
             if keys[pygame.K_RIGHT]:
@@ -158,6 +159,7 @@ while running:
                enemy_y +=enemy_speed
             if keys[pygame.K_UP]:
                enemy_y -=enemy_speed
+   
 
         else:
             if playerect.x > enemy_x:
